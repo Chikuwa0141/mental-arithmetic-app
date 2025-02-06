@@ -19,3 +19,17 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.h1-title{
+  color:#0a0a0a;
+  font-size: 2.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.h2-main{
+  color:#0a0a0a;
+  font-size: 2.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
