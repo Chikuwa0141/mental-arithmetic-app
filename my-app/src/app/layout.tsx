@@ -12,7 +12,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col">
         {/* ヘッダー */}
         <header className="bg-blue-500 text-white p-4 text-center">
-          <h1 className="text-xl font-bold">暗算アプリ</h1>
+          <h1 className="text-xl font-bold">暗算アプリaaaaaaa</h1>
         </header>
 
         {/* メインコンテンツ */}
