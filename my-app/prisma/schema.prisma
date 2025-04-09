@@ -2,6 +2,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./ERD/ERD.svg"
+}
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
@@ -35,5 +39,5 @@ model Answer{
   question  String
   answer    String
   correct   Boolean
-  createdAt DateTime @default(now())
+  answeredAt DateTime 
 }
