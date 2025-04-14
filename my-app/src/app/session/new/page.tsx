@@ -21,7 +21,7 @@ export default function NewSessionPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        userId: session.user.id,
+        userId: Number(session.user.id),  // userIdは数値型　Stringでやってエラー一生出てた
         questionCount,
         condition,
       }),
@@ -32,7 +32,7 @@ export default function NewSessionPage() {
   };
 
   return (
-    <main className="p-8">
+    <main className="p-8 text-center">
       <h1 className="text-2xl font-bold mb-4">問題数を選択してスタート</h1>
 
       <select
