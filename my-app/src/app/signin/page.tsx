@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function SigninPage() {
   const router = useRouter();
@@ -9,37 +10,21 @@ export default function SigninPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
 
   const handleSignin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage("");
-    setSuccessMessage("");
 
-    try {
-      const res = await fetch("/api/auth/[...nextauth]", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+    const res = await signIn("credentials", {
+      redirect: false, // 自動で遷移しないように
+      email,
+      password,
+    });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        setErrorMessage(data.message || "ログインに失敗しました");
-        return;
-      }
-
-      setSuccessMessage("ログイン成功！");
-      setEmail("");
-      setPassword("");
-
-      // 必要があればリダイレクト
-      // router.push("/dashboard");
-    } catch (error) {
-      setErrorMessage("サーバーエラーが発生しました");
+    if (res?.error) {
+      setErrorMessage("メールアドレスまたはパスワードが違います");
+    } else {
+      router.push("/session/new"); // ログイン後の遷移先
     }
   };
 
@@ -75,7 +60,6 @@ export default function SigninPage() {
       </form>
 
       {errorMessage && <p style={{ color: "red", marginTop: "1rem" }}>{errorMessage}</p>}
-      {successMessage && <p style={{ color: "green", marginTop: "1rem" }}>{successMessage}</p>}
     </div>
   );
 }
