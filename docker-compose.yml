@@ -11,3 +11,23 @@ services:
       - '3306:3306'
     volumes:
       - ./mysql_init:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
+
+  nextjs:
+    build:
+      context: ./my-app
+      dockerfile: Dockerfile
+    container_name: nextjs_container
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./my-app:/app
+    depends_on:
+      - db
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=mysql://user:password@db:3306/test_db
+      - SHADOW_DATABASE_URL=mysql://user:password@db:3306/test_db_shadow
+
+volumes:
+  mysql_data:
