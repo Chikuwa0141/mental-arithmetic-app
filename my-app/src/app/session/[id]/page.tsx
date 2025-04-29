@@ -56,7 +56,7 @@ export default function SessionPage() {
     const current = questions[currentIndex];
 
     useEffect(() => {
-        const q = Array.from({ length: 10 }, () => generateQuestion());
+        const q = Array.from({ length: 5 }, () => generateQuestion());  // 5問分の問題を生成 あとで変える
         setQuestions(q);
     }, []);
 

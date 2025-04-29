@@ -40,7 +40,7 @@ export default function NewSessionPage() {
         value={questionCount}
         onChange={(e) => setQuestionCount(Number(e.target.value))}
       >
-        {[10, 20, 30, 40, 50].map((n) => (
+        {[5, 10, 20, 30, 40, 50].map((n) => (
           <option key={n} value={n}>
             {n}問
           </option>
