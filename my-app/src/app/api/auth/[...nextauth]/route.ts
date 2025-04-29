@@ -1,30 +1,50 @@
-//nextauth結局使ってない、後で必要になったら変える
-import { PrismaClient } from "@prisma/client";
-import { NextRequest, NextResponse } from "next/server";
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { prisma } from '../../../../lib/prisma'; // ← 使い回しのPrismaClientを使う
 import bcrypt from "bcrypt";
 
-const prisma = new PrismaClient();
+const handler = NextAuth({
+  providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) return null;
 
-export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const { email, password } = body;
+        const user = await prisma.user.findUnique({
+          where: { email: credentials.email },
+        });
 
-  // ユーザーが存在するか確認
-  const user = await prisma.user.findUnique({
-    where: { email },
-  });
+        if (!user) return null;
 
-  if (!user) {
-    return NextResponse.json({ message: "ユーザーが見つかりません" }, { status: 404 });
-  }
+        const isValid = await bcrypt.compare(credentials.password, user.password);
+        if (!isValid) return null;
 
-  // パスワードが一致するかチェック
-  const isMatch = await bcrypt.compare(password, user.password);
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        };
+      },
+    }),
+  ],
+  callbacks: {
+    async session({ session, token }) {
+      if (session.user && token.sub) {
+        session.user.id = token.sub; // ← user.id をセッションに含める
+      }
+      return session;
+    },
+  },
+  session: {
+    strategy: "jwt", // ← DBなしのセッション方式（必要なら"database"にもできる）
+  },
+  pages: {
+    signIn: "/login", // ログイン画面があるなら指定（任意）
+  },
+});
 
-  if (!isMatch) {
-    return NextResponse.json({ message: "パスワードが正しくありません" }, { status: 401 });
-  }
-
-  // ログイン成功（ここでトークンを返したり、セッション管理したりすることも）
-  return NextResponse.json({ message: "ログイン成功", user: { id: user.id, name: user.name } }, { status: 200 });
-}
+export { handler as GET, handler as POST };
