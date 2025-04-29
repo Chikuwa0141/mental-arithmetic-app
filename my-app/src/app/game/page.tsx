@@ -115,7 +115,7 @@ const GamePage: React.FC = () => {
           {/* 結果の表 */}
           <table className="border-collapse border border-gray-500">
             <thead>
-              <tr className="bg-gray-200 bg-red-200">
+              <tr className="bg-gray-200">
                 <th className="border border-gray-500 px-4 py-2">問題番号</th>
                 <th className="border border-gray-500 px-4 py-2">問題</th>
                 <th className="border border-gray-500 px-4 py-2">あなたの解答</th>

@@ -10,7 +10,7 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - ./mysql_init:/docker-entrypoint-initdb.d
+      # - ./mysql_init:/docker-entrypoint-initdb.d  #seedデータをマイグレーションする前に実行しちゃっておかしくなるから消した
       - mysql_data:/var/lib/mysql
 
   nextjs:
