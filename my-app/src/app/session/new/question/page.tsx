@@ -1,9 +1,8 @@
-// src/app/session/[sessionId]/page.tsx
 'use client';
 
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react'; // ← セッション取得用
 
 type Question = {
     left: number;
@@ -22,12 +21,19 @@ function generateQuestion(): Question {
     let answer: number;
 
     if (operator === '/') {
+        // right を 1〜9 からランダムに決める
         right = Math.floor(Math.random() * 9) + 1;
+
+        // answer を 1〜12 あたりからランダムに決める（←答え）
         answer = Math.floor(Math.random() * 12) + 1;
+
+        // left は answer × right（←これで割った結果が整数になる）
         left = answer * right;
     } else {
+        // 他の演算子なら普通に生成
         left = Math.floor(Math.random() * 90) + 1;
         right = Math.floor(Math.random() * 9) + 1;
+
         switch (operator) {
             case '+': answer = left + right; break;
             case '-': answer = left - right; break;
@@ -62,6 +68,7 @@ export default function SessionPage() {
         setFeedback(correct ? '正解！' : `不正解... 正解は ${current.answer}`);
         setUserAnswers((prev) => [...prev, userAnswer]);
 
+        // 回答記録APIを呼ぶ
         await fetch('/api/answer/create', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -74,6 +81,7 @@ export default function SessionPage() {
             }),
         });
 
+        // 次の問題へ進む（1秒後）
         setTimeout(() => {
             setFeedback('');
             setUserAnswer('');
@@ -81,6 +89,7 @@ export default function SessionPage() {
         }, 1000);
     };
 
+    // すべての問題が終了した場合
     if (currentIndex >= questions.length) {
         const correctCount = questions.filter((q, i) => {
             const correctAnswer = q.answer;

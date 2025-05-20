@@ -14,13 +14,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
   const csvRows = answers.map((a) => {
     return [
-      `"=""${a.question}"""`, // これでExcelに「文字列」と認識させる
+      `"=""${a.question}"""`,
       `"${a.answer}"`,
       a.correct ? "TRUE" : "FALSE",
       a.answeredAt.toISOString(),
     ].join(",");
   });
-  
 
   const csvContent = csvHeaders + csvRows.join("\n");
 
