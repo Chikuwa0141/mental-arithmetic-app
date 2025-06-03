@@ -1,4 +1,4 @@
-// src/app/session/[sessionId]/page.tsx
+// src/app/session/[sessionId]/question/page.tsx
 'use client';
 
 import { useParams } from 'next/navigation';
