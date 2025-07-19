@@ -24,7 +24,7 @@ export default function SigninPage() {
     if (res?.error) {
       setErrorMessage("メールアドレスまたはパスワードが違います");
     } else {
-      router.push("/session/new"); // ログイン後の遷移先
+      router.push("/session/new/mode"); // ログイン後の遷移先
     }
   };
 

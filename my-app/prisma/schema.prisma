@@ -1,11 +1,12 @@
 generator client {
   provider = "prisma-client-js"
 }
-
+/*
 generator erd {
   provider = "prisma-erd-generator"
   output   = "./ERD/ERD.svg"
 }
+*/
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
@@ -65,6 +66,9 @@ model Session {
   user       User    @relation(fields: [userId], references: [id])
   userId    Int
   questionCount Int
+
+  timeLimit Int?
+
   condition String? //任意：高ストレス、安静状態など
   answers   Answer[]
   createdAt DateTime @default(now())

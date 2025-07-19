@@ -28,7 +28,7 @@ export default function NewSessionPage() {
     });
 
     const data = await res.json();
-    router.push(`/session/${data.id}`);
+    router.push(`/session/${data.id}/question`);
   };
 
   return (
